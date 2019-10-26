@@ -20,13 +20,14 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
-  - servant
-  - websockets
-  - time
+  - aeson
   - data-default
+  - servant
+  - time
+  - websockets
 
 executables:
-  websocket-button-exe:
+  button-server:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -34,11 +35,16 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - aeson
+    - dhall
+    - optparse-applicative
+    - servant-server
+    - text
+    - warp
     - websocket-button
-    - data-default
 
 tests:
-  websocket-button-test:
+  button-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
