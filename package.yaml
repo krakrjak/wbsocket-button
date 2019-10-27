@@ -1,7 +1,7 @@
 name:                websocket-button
 version:             0.0.1.0
 github:              "krakrjak/websocket-button"
-license:             BSD3
+license:             BSD2
 author:              "Zac Slade"
 maintainer:          "krakrjak@gmail.com"
 copyright:           "2019 Zac Slade"
