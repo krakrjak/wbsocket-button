@@ -13,6 +13,9 @@ import System.Exit (exitFailure)
 import qualified Dhall as Dhall
 import Dhall (inputFile)
 
+-- fast-logger
+import System.Log.FastLogger
+
 -- optparse-applicative
 import Options.Applicative
 
@@ -99,15 +102,18 @@ apiProxy = Proxy
 buttonApp :: Application
 buttonApp = serve apiProxy serverButtonApi
 
-runButtonApiApp :: ProgOptions -> IO ()
-runButtonApiApp opts = run (fromIntegral $ serverPort opts) buttonApp
+runButtonApiApp :: TimedFastLogger -> ProgOptions -> IO ()
+runButtonApiApp logger opts = run (fromIntegral $ serverPort opts) buttonApp
         
 main :: IO ()
 main = do
+    tcache <- newTimeCache simpleTimeFormat
     opts <- validateConfig =<< execParser cmdOpts
-    case opts of
-      Nothing -> putStrLn "Try again." >> exitFailure
-      Just o -> runButtonApiApp o
+    withTimedFastLogger tcache (LogStdout defaultBufSize) $ (\logger -> do
+        case opts of
+          Nothing -> putStrLn "Try again." >> exitFailure
+          Just o -> runButtonApiApp logger o
+      )
   where
     cmdOpts = info (serverOptions <**> helper)
             ( fullDesc

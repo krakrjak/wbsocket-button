@@ -37,6 +37,7 @@ executables:
     dependencies:
     - aeson
     - dhall
+    - fast-logger
     - optparse-applicative
     - servant-server
     - text
