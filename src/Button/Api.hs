@@ -35,15 +35,21 @@ data ButtonMetadata = ButtonMetadata
   } deriving (Generic, Show)
 instance Default ButtonMetadata where
   def = ButtonMetadata 0 Nothing
+instance J.FromJSON ButtonMetadata
+instance J.ToJSON ButtonMetadata
 
 -- Requests on /button
 data ButtonAction = Peek | Poke
   deriving (Generic, Enum, Show)
+instance J.FromJSON ButtonAction
+instance J.ToJSON ButtonAction
 
 -- Respones to posting to /button
 data ButtonReaction
     = Peeked | Poked
   deriving (Generic, Enum, Show)
+instance J.FromJSON ButtonReaction
+instance J.ToJSON ButtonReaction
 
 type AliveApi = Get '[JSON] ()
 
