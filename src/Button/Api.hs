@@ -5,8 +5,9 @@
 {-# LANGUAGE TypeOperators #-}
 
 module Button.Api
-    ( ButtonApi
-    , AliveApi
+    ( AliveApi
+    , ButtonApi
+    , FullApi
     , ButtonMetadata(..)
     , ButtonAction(..)
     , ButtonReaction(..)
@@ -52,9 +53,11 @@ instance J.FromJSON ButtonReaction
 instance J.ToJSON ButtonReaction
 
 type AliveApi = Get '[JSON] ()
+type GetApi = Get '[JSON] ButtonMetadata
+type PostApi = ReqBody '[JSON] ButtonAction :> Post '[JSON] ButtonReaction
 
-type ButtonApi = "button" :> Get '[JSON] ButtonMetadata
-            :<|> "button" :> ReqBody '[JSON] ButtonAction :> Post '[JSON] ButtonReaction
+type ButtonApi = "button" :> (GetApi :<|> PostApi)
+type FullApi = AliveApi :<|> ButtonApi
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"

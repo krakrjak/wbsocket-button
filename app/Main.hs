@@ -93,17 +93,17 @@ validateConfig opts = if (verbose opts && quiet opts)
                         (\(e :: IOError) -> return $ ProgOptions verbInt (fromIntegral $ port opts))
       if port opts /= 8080 then return (Just (dhconfig { serverPort = fromIntegral $ port opts })) else return $ Just dhconfig
      
-serverButtonApi :: Server ButtonApi
-serverButtonApi = undefined
+serverFullApi :: Server FullApi
+serverFullApi = undefined
 
-apiProxy :: Proxy ButtonApi
+apiProxy :: Proxy FullApi
 apiProxy = Proxy
 
 buttonApp :: Application
-buttonApp = serve apiProxy serverButtonApi
+buttonApp = serve apiProxy serverFullApi
 
-runButtonApiApp :: TimedFastLogger -> ProgOptions -> IO ()
-runButtonApiApp logger opts = run (fromIntegral $ serverPort opts) buttonApp
+runFullApiApp :: TimedFastLogger -> ProgOptions -> IO ()
+runFullApiApp logger opts = run (fromIntegral $ serverPort opts) buttonApp
         
 main :: IO ()
 main = do
@@ -112,7 +112,7 @@ main = do
     withTimedFastLogger tcache (LogStdout defaultBufSize) $ (\logger -> do
         case opts of
           Nothing -> putStrLn "Try again." >> exitFailure
-          Just o -> runButtonApiApp logger o
+          Just o -> runFullApiApp logger o
       )
   where
     cmdOpts = info (serverOptions <**> helper)
